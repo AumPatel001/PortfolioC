@@ -34,7 +34,7 @@ function App() {
           animate={{ opacity: 1 }}
           className="text-accent text-2xl font-bold"
         >
-          Loading Portfolio...
+          Loading Portfolio Website...
         </motion.div>
       </div>
     );
