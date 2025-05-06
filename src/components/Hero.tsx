@@ -29,12 +29,17 @@ const Hero = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-64 h-64 rounded-full overflow-hidden shadow-2xl border-4 border-accent"
+            className="w-64 h-64 rounded-full overflow-hidden shadow-2xl border-4 border-accent relative"
           >
             <img
               src="/PHOTO-2025-05-06-12-14-23.jpg"
               alt="Profile"
               className="w-full h-full object-cover"
+              onError={(e) => {
+                console.error('Error loading image:', e);
+                e.currentTarget.src = 'https://via.placeholder.com/256x256?text=Profile';
+              }}
+              loading="eager"
             />
           </motion.div>
 
