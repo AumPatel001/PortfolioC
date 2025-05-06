@@ -1,8 +1,36 @@
 import { motion } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Sphere } from '@react-three/drei';
+import { useState, useEffect } from 'react';
 
 const Hero = () => {
+  const [imageSrc, setImageSrc] = useState('/images/profile.jpg');
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    // Preload the image
+    const img = new Image();
+    img.src = imageSrc;
+    img.onload = () => {
+      setImageError(false);
+    };
+    img.onerror = () => {
+      console.error('Failed to load image:', imageSrc);
+      setImageError(true);
+    };
+  }, [imageSrc]);
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.error('Error loading image:', e);
+    if (!imageError) {
+      // Try the original path if the new path fails
+      setImageSrc('/PHOTO-2025-05-06-12-14-23.jpg');
+    } else {
+      // If both paths fail, use placeholder
+      e.currentTarget.src = 'https://via.placeholder.com/256x256?text=Profile';
+    }
+  };
+
   return (
     <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-primary">
       {/* 3D Sphere Animation */}
@@ -29,17 +57,15 @@ const Hero = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-64 h-64 rounded-full overflow-hidden shadow-2xl border-4 border-accent relative"
+            className="w-64 h-64 rounded-full overflow-hidden shadow-2xl border-4 border-accent relative bg-gray-200"
           >
             <img
-              src="/PHOTO-2025-05-06-12-14-23.jpg"
+              src={imageSrc}
               alt="Profile"
               className="w-full h-full object-cover"
-              onError={(e) => {
-                console.error('Error loading image:', e);
-                e.currentTarget.src = 'https://via.placeholder.com/256x256?text=Profile';
-              }}
+              onError={handleImageError}
               loading="eager"
+              crossOrigin="anonymous"
             />
           </motion.div>
 
